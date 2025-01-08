@@ -22,6 +22,45 @@ features_train, features_test, labels_train, labels_test = preprocess()
 
 #########################################################
 ### your code goes here ###
+import sys
+from class_vis import prettyPicture
+from prep_terrain_data import makeTerrainData
+
+import matplotlib.pyplot as plt
+import numpy as np
+import time
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+
+# Load the terrain data
+features_train, labels_train, features_test, labels_test = makeTerrainData()
+
+# Create an SVM classifier with a linear kernel
+clf = SVC(kernel="linear")
+
+# Measure training time and fit the model
+t0 = time.time()
+clf.fit(features_train, labels_train)
+print("Training Time:", round(time.time() - t0, 3), "s")
+
+# Measure prediction time and make predictions
+t0 = time.time()
+pred = clf.predict(features_test)
+print("Predicting Time:", round(time.time() - t0, 3), "s")
+
+# Calculate accuracy
+acc = accuracy_score(labels_test, pred)
+print("Accuracy:", acc)
+
+# Visualize the decision boundary (optional)
+try:
+    prettyPicture(clf, features_test, labels_test)
+except NameError:
+    pass
+
+# Function to return accuracy for submission
+def submitAccuracy():
+    return acc
 
 
 #########################################################
