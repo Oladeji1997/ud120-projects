@@ -10,22 +10,27 @@
     
 import sys
 from time import time
-sys.path.append("../tools/")
+from sklearn.tree import DecisionTreeClassifier
+sys.path.append("/content/ud120-projects/tools")
+from email_preprocess import preprocess
+from sklearn.metrics import accuracy_score
 from email_preprocess import preprocess
 
-
-### features_train and features_test are the features for the training
-### and testing datasets, respectively
-### labels_train and labels_test are the corresponding item labels
 features_train, features_test, labels_train, labels_test = preprocess()
 
+# Initialize and train the Decision Tree Classifier
+clf = DecisionTreeClassifier(min_samples_split=40, random_state=42)
+t0 = time()
+clf.fit(features_train, labels_train)
+print("Training Time:", round(time() - t0, 3), "s")
 
+# Measure prediction time
+t1 = time()
+pred = clf.predict(features_test)
+print("Prediction Time:", round(time() - t1, 3), "s")
 
-
-#########################################################
-### your code goes here ###
-
-
-#########################################################
+# Compute accuracy
+accuracy = accuracy_score(labels_test, pred)
+print("Decision Tree Accuracy:", round(accuracy, 3))
 
 
